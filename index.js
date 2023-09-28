@@ -3,18 +3,18 @@ import conn from "./connect.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
-const router = express();
-router.use(express.json());
+const app = express();
+app.use(express.json());
 
 const port = 3000;
 
 // untuk tabel admin
-router.get("/api/admin", async (_req, res) => {
+app.get("/api/admin", async (_req, res) => {
   const data = await conn.query(`SELECT * FROM adminn`);
   res.send(data);
 });
 
-router.post("/api/registrasi", async (req, res) => {
+app.post("/api/registrasi", async (req, res) => {
   const data = await conn.query(
     `SELECT * FROM adminn WHERE email = '${req.body.email}'`
   );
@@ -32,8 +32,8 @@ router.post("/api/registrasi", async (req, res) => {
 });
 
 // menggunakan cookie
-router.use(cookieParser());
-router.use((req, res, next) => {
+app.use(cookieParser());
+app.use((req, res, next) => {
   if (req.path === "/api/login" || req.path.startsWith("/assets")) {
     next();
   } else {
@@ -68,7 +68,7 @@ router.use((req, res, next) => {
   }
 });
 
-router.post("/api/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   let data = await conn.query(
     `SELECT * FROM adminn WHERE email = '${req.body.email}'`
   );
@@ -103,12 +103,12 @@ router.post("/api/login", async (req, res) => {
 });
 
 // untuk tabel produk
-router.get("/api/produk", async (_req, res) => {
+app.get("/api/produk", async (_req, res) => {
   const data = await conn.query(`SELECT * FROM produk`);
   res.send(data);
 });
 
-router.get("/api/tampil/:mi", async (req, res) => {
+app.get("/api/tampil/:mi", async (req, res) => {
   const data = await conn.query(
     `SELECT * FROM produk WHERE nama_barang LIKE '%${req.params.mi}%'`
   );
@@ -116,14 +116,14 @@ router.get("/api/tampil/:mi", async (req, res) => {
 });
 
 // untuk tabel penjualan
-router.get("/api/penjualan", async (_req, res) => {
+app.get("/api/penjualan", async (_req, res) => {
   const data = await conn.query(
     `SELECT * FROM penjualan ORDER BY id_penjual ASC`
   );
   res.send(data);
 });
 
-router.post("/api/penjualan", async (req, res) => {
+app.post("/api/penjualan", async (req, res) => {
   const data = await conn.query(
     `SELECT * FROM penjualan WHERE id_penjual = '${req.body.id_penjual}'`
   );
@@ -142,7 +142,7 @@ router.post("/api/penjualan", async (req, res) => {
 });
 
 // untuk tabel tambah / beli stok
-router.post("/api/tambahstok", async (req, res) => {
+app.post("/api/tambahstok", async (req, res) => {
   const data = await conn.query(`SELECT * FROM tambahstok`);
   if (data.length >= 0) {
     await conn.query(`
@@ -155,18 +155,18 @@ router.post("/api/tambahstok", async (req, res) => {
   }
 });
 
-router.get("/api/tampilstok", async (_req, res) => {
+app.get("/api/tampilstok", async (_req, res) => {
   const data = await conn.query(`SELECT * FROM tambahstok`);
   res.send(data);
 });
 
-router.get("/api/gabung", async (_req, res) => {
+app.get("/api/gabung", async (_req, res) => {
   const data =
     await conn.query(`SELECT pro.kode_barang,pem.jumlah_jual, pro.nama_barang FROM produk pro 
                       INNER JOIN penjualan pem ON pro.kode_barang = pem.kode_barang WHERE pro.harga > 2500`);
   res.send(data);
 });
 
-router.listen(port, () => {
+app.listen(port, () => {
   console.log(`server sedang berjalan pada port ${port}`);
 });
