@@ -1,5 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import login, { getAllAdmin, registrasi } from "./routes/auth-routes.js";
 import {
   addDataPenjualan,
@@ -21,8 +22,9 @@ app.get("/api/admin", getAllAdmin);
 app.post("/api/registrasi", registrasi);
 
 // menggunakan cookie
-app.use(auth);
-function auth(req, res, next) {
+app.use(cookieParser());
+
+app.use((req, res, next) => {
   if (req.path === "/api/login" || req.path.startsWith("/assets")) {
     next();
   } else {
@@ -55,7 +57,7 @@ function auth(req, res, next) {
       }
     }
   }
-}
+});
 
 app.post("/api/login", login);
 
@@ -70,7 +72,7 @@ app.post("/api/penjualan", addDataPenjualan);
 // untuk tabel tambah / beli stok
 app.post("/api/tambahstok", addStok);
 app.get("/api/tampilstok", getAllStok);
-app.get("/api/tampilDetailPenjualan", getDetailPenjualan);
+app.get("/api/detailPenjualan", getDetailPenjualan);
 
 app.listen(port, () => {
   console.log(`server sedang berjalan pada port ${port}`);

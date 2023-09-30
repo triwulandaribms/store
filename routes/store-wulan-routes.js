@@ -57,7 +57,7 @@ export async function getAllStok(_req, res) {
 
 export async function getDetailPenjualan(_req, res) {
   const data =
-    await conn.query(`SELECT pro.nama_produk, pro.harga, pen.jumlah_jual, pen.tanggal FROM produk pro INNER JOIN penjualan pen
+    await conn.query(`SELECT pro.nama_barang, pro.harga, pen.jumlah_jual, pen.tanggal FROM produk pro INNER JOIN penjualan pen
         ON pro.kode_barang = pen.kode_barang`);
   res.send(data);
 }
