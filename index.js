@@ -9,6 +9,7 @@ import {
   getAllProduk,
   getAllStok,
   getDetailPenjualan,
+  getDetailTotalPenjualan,
   getProdukById,
 } from "./routes/store-wulan-routes.js";
 
@@ -72,7 +73,10 @@ app.post("/api/penjualan", addDataPenjualan);
 // untuk tabel tambah / beli stok
 app.post("/api/tambahstok", addStok);
 app.get("/api/tampilstok", getAllStok);
+
+// untuk ERP antara tabel - tabel
 app.get("/api/detailPenjualan", getDetailPenjualan);
+app.get("/api/detailTotalJual", getDetailTotalPenjualan);
 
 app.listen(port, () => {
   console.log(`server sedang berjalan pada port ${port}`);

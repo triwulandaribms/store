@@ -17,22 +17,15 @@ export default async function login(req, res) {
     }
 
     if (cek === true) {
-      const token = jwt.sign(data[0], "secret");
+      const token = jwt.sign(data[0], process.env.SECRET_KEY);
       res.cookie("token", token);
       res.send("berhasil login");
-
-      // menggunakan localtsorage
-
-      // if (data[0].role === "admin") {
-      //   // location.href = "/admin";
-      //   res.send(token);
-      // } else {
-      //   // location.href = "/";
-      //   res.send(token);
-      // }
+      console.log(token);
+    } else {
+      res.send("user belum ada");
     }
   } else {
-    res.send("user belum ada");
+    res.send("email atau password salah");
   }
 }
 
@@ -57,3 +50,12 @@ export async function registrasi(req, res) {
     res.send("berhasil registrasi");
   }
 }
+
+// // menggunakan localtsorage
+// if (data[0].role === "admin") {
+//   // location.href = "/admin";
+//   res.send(token);
+// } else {
+//   // location.href = "/";
+//   res.send(token);
+// }

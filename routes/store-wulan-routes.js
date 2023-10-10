@@ -61,3 +61,10 @@ export async function getDetailPenjualan(_req, res) {
         ON pro.kode_barang = pen.kode_barang`);
   res.send(data);
 }
+
+export async function getDetailTotalPenjualan(_req, res) {
+  const data =
+    await conn.query(`SELECT pro.kode_barang, pro.nama_barang, pro.harga, pen.jumlah_jual, SUM(pen.jumlah_jual * pro.harga) AS total FROM penjualan pen INNER JOIN produk pro
+  ON pen.kode_barang = pro.kode_barang GROUP BY pro.kode_barang, pro.nama_barang`);
+  res.send(data);
+}
