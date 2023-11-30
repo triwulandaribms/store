@@ -96,8 +96,13 @@ export async function editproduk(req, res) {
 export async function hapusProduk(req, res) {
   try {
     await conn.query(
+      `DELETE FROM tambahstok WHERE kode_barang = ${req.params.kode_barang}`
+    );
+
+    await conn.query(
       `DELETE FROM produk WHERE kode_barang = ${req.params.kode_barang}`
     );
+
     res.status(400).send("berhasil menghapus");
   } catch (error) {
     console.error("error during database operation:", error);
