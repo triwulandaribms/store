@@ -1,28 +1,34 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
-import login, { getAllAdmin, registrasi } from "./routes/auth-routes.js";
+import login, {
+  getAllAdmin,
+  registrasi,
+  logoutToken,
+} from "./routes/auth-routes.js";
 import {
   addDataPenjualan,
+  addProduk,
   addStok,
+  editDatapenjualan,
+  editproduk,
   getAllPenjualan,
   getAllProduk,
   getAllStok,
   getDetailPenjualan,
   getDetailTotalPenjualan,
   getProdukById,
+  hapusProduk,
 } from "./routes/store-wulan-routes.js";
 
 const app = express();
 app.use(express.json());
 
-const port = 3000;
-
 // untuk tabel admin
 app.get("/api/admin", getAllAdmin);
 app.post("/api/registrasi", registrasi);
 
-// menggunakan cookie
+// // menggunakan cookie
 app.use(cookieParser());
 
 app.use((req, res, next) => {
@@ -62,22 +68,29 @@ app.use((req, res, next) => {
 
 app.post("/api/login", login);
 
+// tabel tambah / beli stok untuk admin
+app.post("/api/tambahstok", addStok);
+app.get("/api/tampilstok", getAllStok);
+
 // untuk tabel produk
 app.get("/api/produk", getAllProduk);
-app.get("/api/tampil/:mi", getProdukById);
+app.get("/api/tampil/:kode_barang", getProdukById);
+app.post("/api/tambahproduk", addProduk);
+app.put("/api/editproduk/:kode_barang", editproduk);
+app.delete("/api/hapus/:kode_barang", hapusProduk);
 
 // untuk tabel penjualan
 app.get("/api/penjualan", getAllPenjualan);
 app.post("/api/penjualan", addDataPenjualan);
-
-// untuk tabel tambah / beli stok
-app.post("/api/tambahstok", addStok);
-app.get("/api/tampilstok", getAllStok);
+app.put("/api/penjualan/:id_penjual", editDatapenjualan);
 
 // untuk ERP antara tabel - tabel
 app.get("/api/detailPenjualan", getDetailPenjualan);
 app.get("/api/detailTotalJual", getDetailTotalPenjualan);
 
-app.listen(port, () => {
-  console.log(`server sedang berjalan pada port ${port}`);
+// untuk logout
+app.get("/api/exit", logoutToken);
+
+app.listen(3000, () => {
+  console.log(`server sedang berjalan pada port 3000`);
 });
