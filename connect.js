@@ -9,6 +9,6 @@ const pool = mariadb.createPool({
 });
 
 const conn = await pool.getConnection();
-console.log("Basis data telah terhubung.");
+console.log("Basis data terhubung.");
 
 export default conn;
