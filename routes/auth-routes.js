@@ -1,6 +1,6 @@
 import conn from "../connect.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+// import bcrypt from "bcryptjs";
 
 export async function getAllAdmin(_req, res) {
   try {
@@ -38,10 +38,10 @@ export async function registrasi(req, res) {
             !/[!@#$%^&*()_+{}\[\]:;<>,.?~\\]/.test(password) &&
             (password.match(/[A-Z]/g) || []).length === 1
           ) {
-            const salt = await bcrypt.genSalt();
-            const hash = await bcrypt.hash(req.body.passwordd, salt);
+            // const salt = await bcrypt.genSalt();
+            // const hash = await bcrypt.hash(req.body.passwordd, salt);
             await conn.query(
-              `INSERT INTO adminn VALUES ('${req.body.id_admin}','${req.body.nama}','${req.body.email}','${hash}','${req.body.role}')`
+              `INSERT INTO adminn VALUES ('${req.body.id_admin}','${req.body.nama}','${req.body.email}','${req.body.passwordd}','${req.body.role}')`
             );
             res.send("registrasi berhasil.");
           } else {
@@ -71,7 +71,10 @@ export default async function login(req, res) {
 
   let cek;
   if (data.length > 0) {
-    if (await bcrypt.compare(req.body.passwordd, data[0].passwordd)) {
+    if (
+      req.body.passwordd === data[0].passwordd &&
+      req.body.email === data[0].email
+    ) {
       cek = true;
     }
 
